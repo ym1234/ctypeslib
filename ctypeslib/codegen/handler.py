@@ -133,10 +133,10 @@ class ClangHandler(object):
         if cursor.kind == CursorKind.CXX_BASE_SPECIFIER:
             name = cursor.type.spelling
         # if it's a record decl or field decl and its type is anonymous
-        if name == '':
+        if 'unnamed' in name or 'anonymous' in name or name == '':
             # if cursor.is_anonymous():
             # a unnamed object at the root TU
-            if (cursor.semantic_parent
+            if (hasattr(cursor, 'semantic_parent') and cursor.semantic_parent
                 and cursor.semantic_parent.kind == CursorKind.TRANSLATION_UNIT):
                 name = self.make_python_name(cursor.get_usr())
                 log.debug('get_unique_name: root unnamed type kind %s',cursor.kind)
@@ -145,10 +145,11 @@ class ClangHandler(object):
                 name = self._make_unknown_name(cursor, field_name)
                 log.debug('Unnamed cursor type, got name %s',name)
             else:
-                log.debug('Unnamed cursor, No idea what to do')
+                log.debug('Unnamed cursor, No idea what to do ' + str(name) + ' ' + str(cursor.kind))
                 #import code
                 #code.interact(local=locals())
-                return ''
+                # log.debug(name)
+                return name
         if cursor.kind in [CursorKind.STRUCT_DECL,CursorKind.UNION_DECL,
                                  CursorKind.CLASS_DECL, CursorKind.CXX_BASE_SPECIFIER]:
             names= {CursorKind.STRUCT_DECL: 'struct',

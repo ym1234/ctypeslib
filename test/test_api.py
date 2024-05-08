@@ -22,7 +22,7 @@ struct example {
     int flags;
     int count;
     struct example_detail details[2];
-};        
+};
         ''')
         self.assertIn("i", py_namespace)
         self.assertIn("c2", py_namespace)
@@ -47,7 +47,7 @@ struct example {
     int flags;
     int count;
     struct example_detail details[2];
-};        
+};
         ''')
         py_namespace = ctypeslib.translate(input_io)
         self.assertIn("i", py_namespace)
@@ -64,7 +64,7 @@ struct example {
 
     def test_advanced_file_io(self):
         cfg = config.CodegenConfig()
-        cfg.clang_opts.append('-I/home/jal/Code/ctypeslib/test/data/')
+        cfg.clang_opts.append('-I./test/data/')
         py_namespace = ctypeslib.translate_files('test/data/test-enum.c', cfg=cfg)
         self.assertIn("ZERO", py_namespace)
         self.assertIn("myEnum", py_namespace)
